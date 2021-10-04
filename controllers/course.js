@@ -229,9 +229,9 @@ exports.update = async (req, res) => {
 
 
 exports.removeLesson = async (req, res) => {
-  const { slug } = req.params;
-  const course = await Course.findOne({ slug }).exec();
+  const { slug, lessonId } = req.params;
 
+  const course = await Course.findOne({ slug }).exec();
   if (req.user._id != course.instructor) {
     return res.status(400).send("Unauthorized");
   }

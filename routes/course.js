@@ -29,6 +29,8 @@ const {
     markCompleted, 
     listCompleted,
     markIncomplete,
+    uploadLessonImage,
+    removeLessonImage,
 } = require("../controllers/course");
 
 

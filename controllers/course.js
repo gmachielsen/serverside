@@ -244,7 +244,7 @@ exports.addLesson = async (req, res) => {
   try {
     const {slug, instructorId} = req.params;
     const {title, content, video, lessonimage} = req.body;
-
+    console.log(lessonimage, "lessonimage", title, "title", content, "content");
     if(req.user._id != instructorId) {
       return res.status(400).send("Unauthorized");
     } 

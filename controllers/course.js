@@ -117,7 +117,7 @@ exports.uploadLessonImage = async (req, res) => {
 exports.removeLessonImage = async (req, res) => {
   try {
     const { Bucket, Key } = req.body;
-    
+
     const params = {
       Bucket,
       Key,
@@ -243,7 +243,7 @@ exports.removeVideo = async (req, res) => {
 exports.addLesson = async (req, res) => {
   try {
     const {slug, instructorId} = req.params;
-    const {title, content, video} = req.body;
+    const {title, content, video, lessonimage} = req.body;
 
     if(req.user._id != instructorId) {
       return res.status(400).send("Unauthorized");
@@ -252,7 +252,7 @@ exports.addLesson = async (req, res) => {
     const updated = await Course.findOneAndUpdate(
       { slug },
       {
-        $push: { lessons: { title, content, video, slug: slugify(title)}},
+        $push: { lessons: { title, content, video, lessonimage, slug: slugify(title)}},
       },
       { new: true }
     )

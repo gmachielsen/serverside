@@ -43,6 +43,10 @@ router.get("/course/:slug", read);
 router.post("/course/video-upload/:instructorId", requireSignin, formidable({ maxFileSize: 2000 * 1024 * 1024 }), uploadVideo);
 router.post("/course/video-remove/:instructorId", requireSignin, removeVideo);
 
+// lesson
+router.post("/course/upload-lessonpicture", uploadLessonImage);
+router.post("/course/lessonremove-image", removeLessonImage);
+
 // publish unpublish
 router.put("/course/publish/:courseId", requireSignin, publishCourse);
 router.put("/course/unpublish/:courseId", requireSignin, unpublishCourse);

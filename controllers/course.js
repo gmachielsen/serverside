@@ -76,6 +76,67 @@ exports.removeImage = async (req, res) => {
   }
 };
 
+
+exports.uploadLessonImage = async (req, res) => {
+  try {
+  const { lessonimage } = req.body;
+  if (!lessonimage) return res.status(400).send("No image");
+      // prepare the image
+      const base64Data = new Buffer.from(
+        lessonimage.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      );
+  
+      const type = lessonimage.split(";")[0].split("/")[1];
+  
+      // image params
+      const params = {
+        Bucket: "artacademy",
+        Key: `${nanoid()}.${type}`,
+        Body: base64Data,
+        ACL: "public-read",
+        ContentEncoding: "base64",
+        ContentType: `image/${type}`,
+      };
+  
+      // upload to s3
+      S3.upload(params, (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.sendStatus(400);
+        }
+        console.log(data);
+        res.send(data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+}
+
+
+exports.removeLessonImage = async (req, res) => {
+  try {
+    const { Bucket, Key } = req.body;
+    
+    const params = {
+      Bucket,
+      Key,
+    };
+
+    // upload to s3
+    S3.deleteObject(params, (err, data) => {
+      if(err) {
+        console.log(err);
+        res.sendStatus(400);
+      }
+      console.log(data);
+      res.send({ ok: true });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.create = async (req, res) => {
     // console.log("CREATE COURSE", req.body);
     try {

@@ -50,7 +50,16 @@ const courseSchema = new mongoose.Schema({
         default: 9.99,
     },
     image: {},
-    category: String,
+    category: {
+        type: ObjectId,
+        ref: "Category",
+    },    
+    subcategories: [
+        {
+          type: ObjectId,
+          ref: "Subcategory",
+        },
+    ],
     published: {
         type: Boolean,
         default: false,

@@ -12,7 +12,7 @@ const userSchema = new Schema(
     forname: {
       type: String,
       trim: true,
-      required: true,
+      required: false,
     },
     surname: {
       type: String,

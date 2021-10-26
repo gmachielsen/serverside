@@ -31,16 +31,19 @@ const {
     markIncomplete,
     uploadLessonImage,
     removeLessonImage,
+    handlefilter,
 } = require("../controllers/course");
 
 
 router.get("/courses", courses);
+router.post("/search/courses", handlefilter);
+
 // image
 router.post("/course/upload-image", uploadImage);
 router.post("/course/remove-image", removeImage);
 // course 
 router.post("/course", requireSignin, isInstructor, create);
-router.put("/course/:slug", requireSignin, update);
+router.put("/course/update/:slug", requireSignin, update);
 router.get("/course/:slug", read);
 router.post("/course/video-upload/:instructorId", requireSignin, formidable({ maxFileSize: 2000 * 1024 * 1024 }), uploadVideo);
 router.post("/course/video-remove/:instructorId", requireSignin, removeVideo);

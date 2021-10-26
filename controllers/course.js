@@ -269,7 +269,7 @@ exports.addLesson = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { slug } = req.params;
-
+    console.log(req.body, "bodduhdudf", req.user._id, "user");
     const course = await Course.findOne({ slug }).exec();
     console.log("COURSE FOUND => ", course);
   
@@ -289,10 +289,11 @@ exports.update = async (req, res) => {
 };
 
 
-exports.removeLesson = async (req, res) => {
-  const { slug, lessonId } = req.params;
 
+exports.removeLesson = async (req, res) => {
+  const { slug } = req.params;
   const course = await Course.findOne({ slug }).exec();
+
   if (req.user._id != course.instructor) {
     return res.status(400).send("Unauthorized");
   }
@@ -383,6 +384,22 @@ exports.courses = async (req, res) => {
     .populate("instructor", "_id name")
     .exec();
   res.json(all);
+};
+
+exports.handlefilter = async (req, res) => {
+  try {
+    const category = req.body.categoryIds;
+    console.log(category)
+    const courses = await Course.find({category: category}, {published: true })
+      // .populate("category", "_id name")
+      .populate("subcategories", "_id name")
+      .populate("instructor", "_id name")
+      .exec();
+    console.log(courses, "courses")
+    res.json(courses);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 

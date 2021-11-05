@@ -6,7 +6,7 @@ const router = express.Router();
 const { requireSignin } = require("../middlewares");
 
 // controllers
-const { register, login, logout, currentUser, forgotPassword, sendTestEmail, resetPassword } = require("../controllers/auth");
+const { register, login, logout, currentUser, forgotPassword, sendTestEmail, resetPassword, makeadmin } = require("../controllers/auth");
 
 ///dddd
 const {sendRegisterEmail} = require("../controllers/auth");
@@ -20,5 +20,6 @@ router.get("/current-user", requireSignin, currentUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password",  resetPassword);
 router.get("/send-email", sendTestEmail);
+router.post("/makeadmin", makeadmin);
 
 module.exports = router;

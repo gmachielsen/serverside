@@ -389,14 +389,22 @@ exports.courses = async (req, res) => {
 exports.handlefilter = async (req, res) => {
   try {
     const category = req.body.categoryIds;
-    console.log(category)
-    const courses = await Course.find({category: category}, {published: true })
-      // .populate("category", "_id name")
-      .populate("subcategories", "_id name")
-      .populate("instructor", "_id name")
-      .exec();
-    console.log(courses, "courses")
+    const correct = req.body.published;
+    console.log(category, "category")
+    const courses = await Course.find({category: category })
+    //   // .populate("category")
+    //   // .populate("subcategories")
+      .populate("instructor")
+    .exec();
+    // console.log("courses", courses, courses.length, "courses");
+    // .populate("category", "_id name")
+
+    //   .populate("subcategories", "_id name")
+    //   .populate("instructor", "_id name")
+    //   .exec();
     res.json(courses);
+    console.log(courses, "courses")
+
   } catch (err) {
     console.log(err);
   }

@@ -308,3 +308,22 @@ exports.resetPassword = async (req, res) => {
     return res.status(400).send("Error! Try again.");
   }
 };
+
+exports.makeadmin = async (req, res) => {
+  try {
+    const user = await User.findOne(req.body.email).select("-password").exec();
+    console.log(user, "user");
+    const statusUpdated = await User.findByIdAndUpdate(
+      user._id,
+      {
+        $addToSet: { role: "Admin" },
+      },
+      { new: true }
+    )
+      .select("-password")
+      .exec();
+    res.json(statusUpdated);
+  } catch (err) {
+    console.log(err);
+  }
+}

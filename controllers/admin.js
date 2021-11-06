@@ -155,3 +155,23 @@ exports.createCategory = async (req, res) => {
       });
   };
   
+
+  exports.getCourses = async (req, res) => {
+    try {
+      const courses = await Course.find()
+      // .populate("instructor", "_id name")
+      .exec();
+      res.json(courses);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  exports.deleteCourse = async (req, res) => {
+    try {
+      const deletedCourse = await Course.findByIdAndRemove(req.params.id).exec();
+      res.json(deletedCourse);
+    } catch (err) {
+
+    }
+  }

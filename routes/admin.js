@@ -18,6 +18,8 @@ const {
     removeSubCategory,
     listSubCategories,
     getSubs,
+    getCourses,
+    deleteCourse,
 } = require("../controllers/admin");
 
 router.get("/admin", requireSignin, administrator);
@@ -38,5 +40,7 @@ router.put("/admin/update-subcategory/:slug", requireSignin, putSubCategory);
 router.delete("/admin/remove-subcategory/:slug", requireSignin, removeSubCategory);
 router.get("/admin/subcategories", requireSignin, listSubCategories);
 
-
+// courses
+router.get("/admin/courses", getCourses)
+router.delete("/admin/course/delete/:id", deleteCourse);
 module.exports = router;

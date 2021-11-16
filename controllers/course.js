@@ -163,6 +163,7 @@ exports.read = async (req, res) => {
   try {
     const course = await Course.findOne({ slug: req.params.slug })
      .populate("instructor", "_id name")
+     .populate("category", "_id name")
      .exec();
     res.json(course);
   } catch (err) {

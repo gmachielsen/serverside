@@ -382,6 +382,7 @@ exports.unpublishCourse = async (req, res) => {
 exports.courses = async (req, res) => {
   const all = await Course.find({ published: true })
     .populate("instructor", "_id name")
+    .populate("category", "_id name")
     .exec();
   res.json(all);
 };

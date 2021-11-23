@@ -6,7 +6,7 @@ const router = express.Router();
 const { requireSignin } = require("../middlewares");
 
 // controllers
-const { register, login, logout, currentUser, forgotPassword, sendTestEmail, resetPassword, makeadmin } = require("../controllers/auth");
+const { register, login, logout, currentUser, forgotPassword, sendTestEmail, resetPassword, makeadmin, googlelogin } = require("../controllers/auth");
 
 ///dddd
 const {sendRegisterEmail} = require("../controllers/auth");
@@ -15,6 +15,7 @@ const {sendRegisterEmail} = require("../controllers/auth");
 router.post("/reg", sendRegisterEmail);
 router.post("/register", register);
 router.post("/login", login);
+router.post("/google-login", googlelogin);
 router.get("/logout", logout);
 router.get("/current-user", requireSignin, currentUser);
 router.post("/forgot-password", forgotPassword);

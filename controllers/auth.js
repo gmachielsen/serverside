@@ -3,7 +3,7 @@ const { hashPassword, comparePassword } = require("../utils/auth");
 const jwt = require("jsonwebtoken");
 const AWS = require("aws-sdk");
 const { nanoid } = require("nanoid");
-
+const { OAuth2Client } = require("google-auth-library");
 
 
 const awsConfig = {
@@ -147,6 +147,83 @@ exports.register = async (req, res) => {
     return res.status(400).send("Error. Try again.");
   }
 };
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+exports.googlelogin = async (req, res) => {
+  try {
+    const { idToken, email, name } = req.body;
+    if (!idToken) {
+      return res.status(400).send("Error. Try again.");
+    }
+    const user = await User.findOne({ email }).exec();
+    if(user) {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      user.password = undefined;
+      // send token in cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        // secure: true, // only works on https
+      });
+      // send user as json response
+      res.json(user);
+    } else {
+      const user = new User({
+        name,
+        email,
+        // password: hashedPassword,
+      });
+      await user.save();
+      if(user) {
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+        user.password = undefined;
+        // send token in cookie
+        res.cookie("token", token, {
+          httpOnly: true,
+          // secure: true, // only works on https
+        });
+        // send user as json response
+        res.json(user);
+      }
+      // console.log("saved user", user);
+      
+    }
+
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Error. Try again.");
+  }
+  console.log(req.body.idToken, "tokken", req.body.email, "email")
+  // try {
+  //   let firebaseToken = req.headers["authtoken"];
+  //   console.log(firebaseToken, "TOkenetoktokene???");
+  //   const { user } = req.body;
+  //   console.log(user.email, "email??????");
+  //   const email = user.email;
+  //   // check if our db has user with that email
+  //   const userResult = await User.findOne({ email }).exec();
+  //   if (!userResult) return res.status(400).send("No user found");
+  //   // create signed jwt
+  
+  //   const token = jwt.sign({ _id: userResult._id }, process.env.JWT_SECRET, {
+  //     expiresIn: "7d",
+  //   });
+  //   // return user and token to client, exclude hashed password
+  //   // send token in cookie
+  //   res.cookie("token", token, {
+  //     httpOnly: true,
+  //     // secure: true, // only works on https
+  //   });
+  //   // console.log(req.cookie.token, "req coooookie tooooken");
+  //   // send user as json response
+  //   res.json(userResult);
+  // } catch (err) {
+  //   console.log(err);
+  //   return res.status(400).send("Error. Try again.");  }
+}
 
 exports.login = async (req, res) => {
   try {
